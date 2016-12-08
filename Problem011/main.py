@@ -1,9 +1,15 @@
+import time
+
 def calc_horisontally(list, calc_amount):
     for row in range(0, len(list)):
         for col in range(0, len(list[row])-calc_amount+1):
-            for j in range(col, col+calc_amount):
-                print (list[j])
-            print ("end")
+            for position in range(col, col+calc_amount):
+                #print ("position=", position)
+                #print ("column=", col)
+                print("list[%s][%s] = %s") % (row, position, list[row][position])
+            print("#"*10)
+            time.sleep(5)
+            #print ("end")
 
 
 def calc_vertically(amount):
@@ -42,6 +48,7 @@ split_grid = grid.splitlines()
 for i in range(0, len(split_grid)):
         split_grid[i] = split_grid[i].split()
 
-calc_horisontally(split_grid, 4)
-print (len(split_grid))
+
+calc_horisontally(split_grid, calc_amount=4)
+
 

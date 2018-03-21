@@ -1,26 +1,4 @@
-import time
-
-def calc_horisontally(list, calc_amount):
-    for row in range(0, len(list)):
-        for col in range(0, len(list[row])-calc_amount+1):
-            for position in range(col, col+calc_amount):
-                #print ("position=", position)
-                #print ("column=", col)
-                print("list[%s][%s] = %s") % (row, position, list[row][position])
-            print("#"*10)
-            time.sleep(5)
-            #print ("end")
-
-
-def calc_vertically(amount):
-    pass
-
-def calc_diagon_right(amount):
-    pass
-
-def calc_diagon_left(amount):
-    pass
-
+# -*- coding: utf-8 -*
 
 grid = '''08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
 49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00
@@ -43,12 +21,61 @@ grid = '''08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
 20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54
 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48'''
 
+
+
 split_grid = grid.splitlines()
 
 for i in range(0, len(split_grid)):
-        split_grid[i] = split_grid[i].split()
+        split_grid[i] = [int(item) for item in split_grid[i].split()]
+        #print split_grid[i]
+
+#print split_grid
+# перебираем массив и на каждом элементе перемножаем 4 элемента вправо, по диагонали вправо, вниз и по диагонали влево
+# сравниваем произведение с предыдущим максимальным, если оно больше, то записываем его.
+# если в ряду/колонке не хватает позиций - скипаем
+highest_result = 0
+col_len = 20
+row_len = 20
+col_position = 0
+row_position = 0
+
+while row_position < row_len:
+    while col_position < col_len:
+        # Check if there's enough of columns to calculate right
+        if col_position + 3 < col_len:
+            # no sense to use cycles
+            product = split_grid[row_position][col_position] * split_grid[row_position][col_position+1] * \
+                      split_grid[row_position][col_position+2] * split_grid[row_position][col_position+3]
+
+            if (highest_result < product): highest_result = product
+
+        # Check if there's enough of items to calculate diagonally right
+        if col_position + 3 < col_len:
+            if row_position + 3 < row_len:
+                product = split_grid[row_position][col_position] * split_grid[row_position+1][col_position + 1] * \
+                          split_grid[row_position+2][col_position + 2] * split_grid[row_position+3][col_position + 3]
+
+                if (highest_result < product): highest_result = product
 
 
-calc_horisontally(split_grid, calc_amount=4)
+        # Check if there's enough of items to calculate down
+        if row_position + 3 < row_len:
+            product = split_grid[row_position][col_position] * split_grid[row_position + 1][col_position] * \
+                      split_grid[row_position + 2][col_position] * split_grid[row_position + 3][col_position]
 
+            if (highest_result < product): highest_result = product
+
+        # Check if there's enough of items to calculate diagonally left
+        if col_position - 3 < col_len:
+            if row_position + 3 < row_len:
+                product = split_grid[row_position][col_position] * split_grid[row_position+1][col_position - 1] * \
+                          split_grid[row_position+2][col_position - 2] * split_grid[row_position+3][col_position - 3]
+
+                if (highest_result < product): highest_result = product
+
+        col_position += 1
+    col_position = 0
+    row_position += 1
+
+print "highest result: %s" % highest_result
 

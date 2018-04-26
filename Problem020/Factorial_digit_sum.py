@@ -10,4 +10,4 @@ def count_sum_of_digits(number):
 
 
 if __name__ == "__main__":
-    print count_sum_of_digits(10)
+    print count_sum_of_digits(100)
